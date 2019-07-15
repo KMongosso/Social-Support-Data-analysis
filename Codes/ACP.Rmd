@@ -1,0 +1,144 @@
+---
+title: "ACP"
+output:
+  html_document: default
+  word_document: default
+  pdf_document: default
+---
+```{r}
+data=read.csv("../Data/socsupport.csv",header=TRUE,sep=";")
+attach(data)
+str(data)
+
+n=nrow(data)
+p=ncol(data)
+
+delete = vector("numeric",n)
+
+for(i in 1:n){
+  for(j in 1:p){
+    if(is.na(data[i,j]))
+      delete[i]=1
+  }
+}
+
+for(i in n:1){
+  if (delete[i]==1)
+    data=data[-c(i),]
+}
+
+data = data[,-c(1)]
+```
+
+
+L'ACP s'effectue sur des variables quantitatives. Nous gardons seulement ces dernières.
+
+
+```{r}
+dataquant=data[,-c(1,2,3,4,5,6,7,8,9)]
+dataquant
+```
+
+
+
+Pour commencer, on centre les données :
+
+
+```{r}
+X= scale(dataquant, center=T, scale=F)          
+```
+
+
+On détermine les valeurs et vecteurs propres : 
+
+
+```{r}
+S = cov(X)*((n-1)/n)
+acp = eigen(S)
+lambda = acp$values
+vecteurs_principaux = acp$vectors
+```
+
+
+
+On étudie la quantité d'information apportée par chaque axe pour déterminer le nombre d'axes à conserver à l'aide de la variance :
+
+
+```{r}
+pca.dataquant=princomp(dataquant)
+summary(pca.dataquant)
+```
+
+
+
+
+Proportion of variance et cumulative proportion de la commande summary dataquant nous montre que l'on peut extraire une grande quantité des données à partir des 2 premiers axes (79%). De plus, on observe que la diminution de la proportion of variance ne diminue pas linéairement ce qui veut dire que les données sont corrélées et donc que l'ACP est utile.
+
+Il est possible de mettre cela en évidence à l'aide d'un graphique.
+
+
+
+```{r}
+plot(pca.dataquant,type='l')
+```
+
+Maintenant que nous avons déterminé les axes à garder, nous allons vérifier premièrement que la projection de l'individu sur le plan est de qualité puis la contribution de chaque individu sur le nouveau plan.
+
+Qualité des individus : 
+
+```{r}
+C= pca.dataquant$scores   
+
+norm=function(x) {return(sum(x^2))}
+cos2=cbind(C[,1]^2/apply(X,1,norm),C[,2]^2/apply(X,1,norm))
+rowSums(cos2)
+```
+Aucun individu n'a un rowSums(cos2) proche de 0. La qualité de la projection est bonne pour tous les individus.
+
+Contribution de chaque individu : 
+
+```{r}
+CTB=cbind(C[,1]^2/lambda[1], C[,2]^2/lambda[2])
+CTB/n
+```
+
+
+Ici, la contribution de chaque individu est faible. Il n'y a donc pas de contribution excessive.
+
+Maintenant que nous avons prouvé que les projections et les données sont bonnes et pertinentes, nous pouvons les analyser.
+Tout d'abord, observons les corrélations.
+
+
+Cercle des corrélations : 
+
+
+
+```{r}
+a=seq(0,2*pi,length=100)
+plot(cos(a), sin(a), type='l',lty=3,xlab='Axe 1 (61 %)', ylab='Axe 2 (19 %)',main="Cercle des corrélations" )
+
+cercle_correlation=cor(X,C)
+arrows(0,0,cercle_correlation[,1],cercle_correlation[,2],col=2)
+text(cercle_correlation[,1],cercle_correlation[,2],labels=colnames(dataquant))
+```
+
+
+On observe que le premier axe influence positivement toutes les variables excepté le score au BDI. Il expose ainsi l'effet de la dépression sur les autres facteurs émotionnels et psychologiques. Lorsque le BDI est élevé, les autres variables sont globalement faibles et au contraire les autres variables sont plus fortes lorsque BDI est faible.
+
+Le deuxième quant à lui est corrélé positivement avec toutes les variables du jeu de données. Plus, les variables sont grandes plus l'état émotionnel général est élevé.
+
+```{r}
+
+plot(C[,1:2],type="n",,xlab='Axe 1 (61 %)', ylab='Axe 2 (19 %)')  
+text(C[,1:2],labels=row.names(dataquant),cex=1.5)
+title(main="Projection sur les 2 premiers axes principaux")
+lines(c(min(C[,1]),max(C[,1])),c(0,0),lty=2)
+lines(c(0,0),c(min(C[,2]),max(C[,2])),lty=2)
+
+```
+
+
+On observe que la majeure partie des individus se trouvent au niveau de l'origine du plan. Cela veut dire que ces personnes ont un certains équilibre psychologique dans le sens où leur score global et leur score pour chaque variable sont plus ou moins autour de la moyenne. On observe cependant quelques individus (un peu moins de 10) qui se séparent du groupe au niveau du premier axe (axe comparant le BDI aux autres facteurs psychologiques). En regardant, les données spécifiques à ces individus (36 ou 68 par exemple), on remarque qu'en effet leur score au BDI est très largement au dessus de la moyenne de la population ce qui a en contre-partie un revers négatifs sur les variables. Nous verrons plus tard à l'aide de la classification non supervisée s'il est possible justement de séparer ces individus en plusieurs groupes.
+
+
+

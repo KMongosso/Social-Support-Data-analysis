@@ -1,0 +1,115 @@
+---
+title: "ACM"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+data=read.csv("../Data/socsupport.csv",header=TRUE,sep=";")
+attach(data)
+str(data)
+```
+
+
+
+
+L'ACM s'effectue sur des variables qualitatives. Nous gardons seulement ces dernières.
+
+
+
+
+```{r}
+
+dataqual = data[,-c(1,10,11,12,13,14,15,16,17,18,19,20,21)]
+dataqual
+
+```
+
+
+
+On applique l'ACM sur ce jeu de données : 
+
+
+
+```{r}
+
+library("FactoMineR")
+
+acm=MCA(dataqual)
+
+```
+
+
+En ACM, le maximum d'inertie apporté par chaque axe est en général faible, nous allons donc conserver les axes avec une inertie supérieur à 1/8  (0.125).
+
+
+
+```{r}
+summary(acm)
+plot(acm$eig[,1],type='b')
+```
+
+
+
+Il nous faudrait conserver 9 axes pour avoir une information suffisante.
+
+Pour notre étude, nous allons nous contenter d'étudier les deux premiers axes qui fournissent tout de même 25% des informations sur le jeu de données
+
+```{r}
+acm$var$eta2
+```
+
+
+L'axe 1 est influencé par l'age, marital et livewith.
+L'axe 2 est influencé par l'age, livewith et employment.
+
+Il semble apparaître une corrélation entre age, livewith, employment et marital aux vues des contribueurs de chaque axe.
+
+
+
+```{r}
+plot(acm,invisible="var")
+plot(acm,invisible="quali.sup")
+plot(acm)
+```
+
+Ici, comme dans l'ACP que nous avons effectué plus tôt, on retrouve deux groupes : un groupe avec la majeur partie des individus autour de l'origine (qu'on appelera premier groupe) et un groupe d'un peu moins de 10 individus sur le premier quadrant du plan (qu'on appelera deuxième groupe). On pourait tracer une droite d'équation y = 1.5-x pour les séparer. Nous allons observer les individus de ces groupes :
+
+```{r}
+dataqual[c(39,10,44,45,23,28,18,24),]
+dataqual[c(1,2,3,4,5,6,7,8,9,11,12,13,14,15),]
+```
+
+Les individus du deuxième groupe sont des individus de plus de 31 ans mariés ou dans une situation autre, qui vivent seuls ou avec un partenaire et qui sont en grande partie dans un emploi autre.
+
+Les individus du second groupe sont plus jeunes (moins de 30 ans) sont majoritairement seuls, vivent avec un parent, partenaire, amis ou en résidence et sont des employés à plein temps, à temps partiel, sous assistance du gouvernement ou de leurs parents. Cela coïncide avec les influences des axes énoncées plutôt.  
+
+On remarque également un effet Guttman sur le graphique des individus. L'axe principal d'un effet Guttman oppose les extrêmes des données. Ici, on peut considérer que la population est scindable en deux populations "extrêmes" décrites dans les paragraphes précédents.
+
+
+Nous allons afficher les individus en essayant de les regrouper par rapport aux différentes variables qualitatives. 
+
+```{r}
+
+plotellipses(acm, keepvar = c("marital","livewith","age","employment","enrolment","gender","country"),cex=0.7)
+
+```
+
+
+
+Si on superpose les graphiques liés à livewith, marital et age, on peut remarquer que les personnes de plus de 31 ans ont plus tendance soit à vivre seul ou avec un(e) partenaire et à être marié ou dans une autre situation. Les individus entre 18 et 20 ans sont en général célibataire et vivent avec des amis, en résidence, leur parent ou autre. Il n'y a pas d'autres corrélations apparentes entre les variables qualitatives. On en conclut une relation entre l'age, la situation amoureuse et les personnes avec qui l'individu vit.
+
+Nous avons également dit, après l'observation des graphiques, qu'il serait éventuellement possible de séparer ces individus en deux groupes ce que nous avions également fait lors de l'ACP. Il serait intéressant de voir si ces groupes sont composés des mêmes individus. Nous allons par la suite utiliser les méthodes de classifications pour justement étudier cette fois les relations entre variables quantitatives et qualitatives.
+
+
+ 
+
+
+
+

@@ -1,0 +1,171 @@
+body{
+	background: url('./Fond/background.jpg');
+	background-attachment:fixed;
+	font-size: large;
+}
+
+header{
+	background-color: none;
+}
+
+a{
+	text-decoration: none;
+}
+
+
+#tete{
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content: center;
+}
+
+
+#titre{
+	display:flex;
+	flex-direction:row;
+	justify-content: center;
+}
+
+.logo{
+	margin-top: 15px;
+	width:60px;
+	margin-right: 50px;
+	margin-left: 50px;
+	height:60px;
+
+}
+
+.phrase{
+	font-style: italic;
+	text-align: center;
+	color: #3840EC;
+	font-size: 2em;
+	font-weight: bold;
+	font-family: Helvetica;
+	text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+}
+
+nav{
+	display:flex;
+	margin-top: 1.5em;
+	justify-content: center;
+	margin-bottom: 1.5em;
+}
+
+
+
+nav span{
+	border:1px solid black;
+	border-radius: 5px ;
+	text-align: center;
+	margin-left:2.5em;
+	margin-right:2.5em;
+	width:15em;
+	opacity: 0.6  ;
+	box-shadow: 1px 1px 1px 1px black;
+}
+
+nav span a {
+	text-decoration: none;
+	font-weight: bold;
+	color:black;
+}
+
+nav span:hover{
+	font-size: 1.3em;
+    color: #760001;
+    text-decoration: none;
+}
+
+
+h2{
+	text-align: center;
+	margin-top:0px;
+	margin-bottom: 1em;
+	font-weight: 1000;
+	color:#3840EC;
+
+}
+
+h4{
+	text-align: center;
+	
+
+
+}
+
+#link{
+	text-align: center; 
+	margin-top: 3em;
+	margin-bottom: 3em;
+}
+
+
+.subtitle{
+	border: 2px solid#3840EC;
+	border-radius: 5px;
+	padding:1em;
+	margin-right: 1em;
+	margin-left: 1em;
+}
+
+figure{
+	display: flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+	margin-top:2em;
+}
+
+table{
+	
+	text-align: center;
+	border-collapse: collapse;
+}
+
+td, th{
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+
+
+.tabsize{
+width:100px;
+}
+
+
+.part{
+	display: flex;
+	flex-direction:row;
+	justify-content:space-around;
+	text-align:center;
+}
+
+figcaption a{
+	text-decoration: none;
+	font-weight: bold;
+	color:black;
+}
+
+#article{
+	justify-content:center;
+}
+
+#doudous{
+	display: flex;
+	justify-content: center;
+}
+
+#cadre{
+	border: solid 2px black;
+	background-color: white;
+	width:300;
+	height:300;
+}
+
+#caption{
+	margin-top:1em;
+	justify-content:center;
+}

@@ -1,0 +1,270 @@
+---
+title: "Classification Non Supervisée"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data=read.csv("../Data/socsupport.csv",header=TRUE,sep=";")
+attach(data)
+str(data)
+```
+
+
+
+Dans un premier temps, nous allons étudier l'ensemble du jeu de données à l'aide de la fonction FAMD car cette fonction est applicable à la fois sur les variables quantitatives et qualitatives. Comme nous avons pu le faire pour l'ACP, nous devons supprimer les individus dont certaines données sont non acquises.
+
+
+
+
+```{r}
+library("FactoMineR")
+data = data[,-c(1)]
+n=nrow(data)
+p=ncol(data)
+
+delete = vector("numeric",n)
+
+for(i in 1:n){
+  for(j in 1:p){
+    if(is.na(data[i,j]))
+      delete[i]=1
+  }
+}
+
+for(i in n:1){
+  if (delete[i]==1)
+    data=data[-c(i),]
+}
+
+nonsuper = FAMD(data)
+nonsuper
+summary(nonsuper,nbelements = Inf)
+
+```
+
+
+
+
+Sur le graphique des individus on trouve une grande partie des individus au niveau de l'origine avec tout de même quelques variations(des individus légèrement au dessus ou en dessous selon l'axe 2). On observe également quelques individus qui se séparent du groupe horizontalement (axe 1).
+
+Sur le graphique des variables, on semble apercevoir que l'axe 1 est globalement plus influencé par les variables quantitatives et l'axe 2 par les variables qualitatives. Cela est confirmé par le sommaire de nonsuper où l'on voit respectivement une plus grande contribution des variables quantitatives sur l'axe 1 et une plus grande contribution des variables qualitatives sur l'axe 2.
+
+Nous retrouvons à peu près les mêmes graphiques au niveau du cercle des corrélations et des variables qualitatives que lors des étude précédentes.
+
+On ne peut tirer plus de conclusions de ces graphiques qui sont peu lisibles.
+
+
+L'idée est maintenant d'étudier séparément les variables quantitatives et qualitatives à l'aide respectivement des méthodes CAH et k-means.
+
+Dendogramme pour choisir le nombre de classes sur les variabes quantitatives : 
+
+```{r}
+dataquant = data[,-c(1,2,3,4,5,6,7,8)]
+dataquant.cr <- scale(dataquant,center=T,scale=T)
+d.dataquant.cr <- dist(dataquant.cr)
+cah.ward.cr <- hclust(d.dataquant.cr,method="ward.D2")
+plot(cah.ward.cr,hang =-1)
+```
+
+
+
+Le dendogramme ci-dessus nous laisse penser que 4 classes seront suffisantes pour extraire suffisamment d'informations du jeu de données.
+ 
+On pose donc K=4 et on affiche le même graphique avec les 4 groupes apparents.
+
+
+
+```{r}
+
+K=4
+plot(cah.ward.cr,hang =-1,main="ward.D2")      
+rect.hclust(cah.ward.cr,k=4)
+
+```
+
+
+On regroupe maintenant les individus suivant ces 4 groupes et on calcule les moyennes pour chaque variable.
+```{r}
+groupes.4 <- cutree(cah.ward.cr,k=4)
+table(groupes.4) 
+
+K=4
+Means_groupes <- matrix(NA, nrow=K, ncol=dim(dataquant)[2])
+colnames(Means_groupes)=colnames(dataquant)
+for (i in 1:K) Means_groupes[i,]<- colMeans(dataquant[groupes.4==i,])
+Means_groupes
+
+```
+
+
+
+
+
+
+Tout d'abord, on observe que le groupe 1, qui est le groupe le plus représenté, a un indice proche de la moyenne pour toutes les variables quantitatives (voir colonne mean de summary plus bas). On en déduit que ce groupe correspond à la masse d'individu à l'origine sur le graphique des individus. Les groupes 2 et 3 sont respectivement légèrement en dessous et au dessus de la moyenne pour toutes les variables quantitatives excepté pour le score au BDI où ils sont respectivement légèrement au dessus et légèrement en dessous de la moyenne. Finalement, le groupe le moins représenté est le groupe 4 avec seulement 7 individus. Ce groupe montre bien la corrélation entre l'état dépressif et l'état des autres facteurs émotionnels. En effet, leur score au BDI est très largement supérieur à ceux des autres groupes et leur état émotionnel est déplorable ce qui est cohérent avec nos précédentes analyses. 
+
+
+
+
+```{r}
+summary(dataquant)
+```
+
+
+Nous passons à l'étude de la deuxième partie du jeu de données en utilisant le k-means.
+
+On applique l'ACM sur les données qualitatives :
+
+
+```{r}
+
+
+dataqual = data[,-c(9,10,11,12,13,14,15,16,17,18,19,20)]
+
+
+acm=MCA(dataqual,graph = F)
+
+
+
+```
+
+```{r}
+
+inertie.intra <- rep(0,10)
+for (k in 1:10){
+kmeans.acm <- kmeans(acm$ind$coord[,1:2],centers=k,nstart=100)
+inertie.intra[k] <- kmeans.acm$tot.withinss/kmeans.acm$totss
+}
+
+plot(1:10,inertie.intra,type="b",xlab="Nb. de groupes",ylab="% inertie intra")
+
+```
+
+
+
+Le graphique nous montre que 4 classes sont suffisantes pour avoir suffisamment d'informations (environ 80%).
+
+Nous allons observer le clustering avec 4 classes.
+
+
+
+```{r}
+
+K=4
+kmeans.acm <-  kmeans(acm$ind$coord[,1:2],centers=K,nstart=100)
+table(kmeans.acm$cluster)
+kmeans.acm$cluster
+
+```
+
+ 
+En observant groupes.4 et kmeans$acm.cluster, on se rend compte que les répartitions obtenues à l'aide des deux méthodes ne correspondent pas.
+ 
+
+ 
+```{r}
+table(kmeans.acm$cluster,dataqual[,1])
+```
+
+
+
+En dehors d'un groupe qui est assez homogène, la majorité des groupes est composé majoritairement de femmes mais le nombre de femmes étant largement supérieur au nombre d'hommes, il n'est pas très pertinent de tirer des conclusions à partir de cette information.
+
+
+
+
+
+```{r}
+table(kmeans.acm$cluster,dataqual[,2])
+```
+
+
+
+On remarque 2 groupes jeunes, un groupe plus agé et un groupe entre les deux.
+
+
+
+```{r}
+table(kmeans.acm$cluster,dataqual[,3])
+```
+
+
+
+
+De même que pour le genre, le nombre d'australiens et "d'étrangers" est trop différent pour pouvoir utiliser cette information. Nous avions déjà remarqué cela lors de l'utilisation de la fonction FAMD et l'analyse descriptive. Nous pourrions éventuellement recommencer l'étude en supprimant ces variables qui n'ont pas grande importance.
+
+
+
+
+```{r}
+table(kmeans.acm$cluster,dataqual[,4])
+```
+
+
+
+
+Nous avons ici 2 groupes d'individus célibataires et 2 groupes avec des individus dans des situations mariées ou autres.
+
+
+
+```{r}
+table(kmeans.acm$cluster,dataqual[,5])
+```
+
+
+
+Ici, nous avons 2 groupes qui vivent plus généralement en résidence, avec leurs amis ou leurs parents. Les 2 autres groupes sont plus amenés à vivre avec un(e) partenaire. 
+
+
+
+
+
+```{r}
+table(kmeans.acm$cluster,dataqual[,6])
+```
+
+
+
+
+
+```{r}
+table(kmeans.acm$cluster,dataqual[,7])
+```
+
+
+2 groupes sont constitués uniquement d'individus qui ne sont pas en première année
+
+```{r}
+table(kmeans.acm$cluster,dataqual[,8])
+```
+
+
+Tous les groupes ont une majorité d'emplois à temps plein mais encore une fois le nombre d'employés à temps plein est supérieur au nombre d'employés à temps partiel.
+
+Pour résumé :
+
+
+  - un groupe de femmes et d'hommes/ + 31 ans / australiens / ou autre / vivant seul ou avec partenaire / temps partiel /  autre  (on appelle groupe 1 )
+  
+  
+  - un groupe de femmes / 21-30 / australien / marié ou autre / vivant avec un partenaire / temps partiel / autre ( on appelle groupe 2)
+  
+  
+  
+  - un groupe de femmes / 18-24 / australien / célibataire / vivant avec des amis des parents ou en résidence / gouvernement assistance, parent assistance, temps partiel / autre (on appelle groupe 3)
+  
+  
+  - un groupe de femmes / 18-24 / australien / célibataire / vivant avec  des parents ou en résidence / gouvernement assistance, parent assistance, temps partiel / autre (on appelle groupe 4)
+
+
+Nous voyons que les 4 groupes de chaque étude ne sont pas associables les uns aux autres et donc que nous ne pouvons pas établir de relation entre variables quantitatives et qualitatives à partir de cela. Nous allons maintenant à l'aide d'une méthode de classification supervisée vérifier qu'il n'y ait réellement pas de lien. 
+
+
+
+

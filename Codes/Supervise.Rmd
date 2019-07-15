@@ -1,0 +1,267 @@
+---
+title: "Régression logistique"
+output: html_document
+---
+
+```{r}
+data=read.csv("../Data/socsupport.csv",header=TRUE,sep=";")
+attach(data)
+str(data)
+
+data = data[,-c(1)]
+n=nrow(data)
+p=ncol(data)
+
+delete = vector("numeric",n)
+
+for(i in 1:n){
+  for(j in 1:p){
+    if(is.na(data[i,j]))
+      delete[i]=1
+  }
+}
+
+for(i in n:1){
+  if (delete[i]==1)
+    data=data[-c(i),]
+}
+
+```
+
+
+
+Nous allons maintenant effectuer une régression logistique sur toutes les variables qualitatives pour étudier leur relation avec les variables quantitatives.
+
+```{r}
+res = glm(gender ~ emotional+emotionalsat+affect+affectsat+tangible+tangiblesat+psi+psisat+esupport+psupport+BDI+supsources, family = binomial ,data)
+summary(res)
+```
+
+
+Le genre est influencé significativement par tangiblesat, tangible, et supsources.
+
+
+```{r}
+n=nrow(data)
+p=ncol(data)
+
+delete1 = vector("numeric",n)
+delete2 = vector("numeric",n)
+for(i in 1:n){
+    if(data[i,1]=="male")
+      delete1[i]=1
+     if(data[i,1]=="female")
+      delete2[i]=1
+}
+
+datafemale=data
+datamale=data
+for(i in n:1){
+  if (delete1[i]==1)
+    datafemale=datafemale[-c(i),]
+  if (delete2[i]==1)
+    datamale=datamale[-c(i),]
+}
+
+summary(datamale)
+
+summary(datafemale)
+```
+
+Les femmes ont plus de support tangible et les hommes ont plus de satisfaction tangible et de source de support.
+
+Nous affectuons les mêmes opérations sur toutes les variables.
+```{r}
+res = glm(age ~ emotional+emotionalsat+affect+affectsat+tangible+tangiblesat+psi+psisat+esupport+psupport+BDI+supsources, family = binomial ,data)
+
+summary(res)
+
+```
+
+L'âge est influencé par esupport et supsources. 
+```{r}
+n=nrow(data)
+p=ncol(data)
+
+delete1 = vector("numeric",n)
+delete2 = vector("numeric",n)
+delete3 = vector("numeric",n)
+delete4 = vector("numeric",n)
+delete5 = vector("numeric",n)
+
+for(i in 1:n){
+    if(data[i,2]=="18-20")
+      delete1[i]=1
+    
+   if(data[i,2]=="21-24")
+      delete2[i]=1
+  
+   if(data[i,2]=="25-30")
+      delete3[i]=1
+  
+    if(data[i,2]=="31-40")
+      delete4[i]=1
+   
+    if(data[i,2]=="40+")
+      delete5[i]=1
+}
+
+data18=data
+data21=data
+data25=data
+data31=data
+data40=data
+
+for(i in n:1){
+  if (delete1[i]!=1)
+    data18=data18[-c(i),]
+  if (delete2[i]!=1)
+    data21=data21[-c(i),]
+   if (delete3[i]!=1)
+    data25=data25[-c(i),]
+    if (delete4[i]!=1)
+    data31=data31[-c(i),]
+    if (delete5[i]!=1)
+    data40=data40[-c(i),]
+}
+
+summary(data18)
+summary(data21)
+summary(data25)
+summary(data31)
+summary(data40)
+```
+Les sources de support et les supports émotionnels augmentent jusqu'à 25-30 ans puis diminuent.
+
+
+
+
+```{r}
+res = glm(country~ emotional+emotionalsat+affect+affectsat+tangible+tangiblesat+psi+psisat+esupport+psupport+BDI+supsources, family = binomial ,data)
+summary(res)
+```
+
+
+Le pays est influencé par tangible, tangiblesat, esupport et psupport
+
+```{r}
+n=nrow(data)
+p=ncol(data)
+
+delete1 = vector("numeric",n)
+delete2 = vector("numeric",n)
+for(i in 1:n){
+    if(data[i,3]=="australia")
+      delete1[i]=1
+     if(data[i,3]=="other")
+      delete2[i]=1
+}
+
+dataaus=data
+dataother=data
+for(i in n:1){
+  if (delete1[i]==1)
+    dataother=dataother[-c(i),]
+  if (delete2[i]==1)
+    dataaus=dataaus[-c(i),]
+}
+
+summary(dataaus)
+
+summary(dataother)
+```
+
+
+Les individus d'autres pays ont en général un tangible, tangiblesat, esupport et psupport supérieur aux australiens.
+
+```{r}
+res = glm(marital ~ emotional+emotionalsat+affect+affectsat+tangible+tangiblesat+psi+psisat+esupport+psupport+BDI+supsources, family = binomial ,data)
+
+summary(res)
+```
+
+Marital est influencé par psupport.
+
+
+```{r}
+n=nrow(data)
+p=ncol(data)
+
+delete1 = vector("numeric",n)
+delete2 = vector("numeric",n)
+delete3 = vector("numeric",n)
+
+for(i in 1:n){
+    if(data[i,4]=="other")
+      delete1[i]=1
+    
+   if(data[i,4]=="single")
+      delete2[i]=1
+  
+   if(data[i,4]=="married")
+      delete3[i]=1
+  
+}
+
+dataother=data
+datasingle=data
+datamarried=data
+
+for(i in n:1){
+  if (delete1[i]!=1)
+    dataother=dataother[-c(i),]
+  if (delete2[i]!=1)
+    datasingle=datasingle[-c(i),]
+   if (delete3[i]!=1)
+    datamarried=datamarried[-c(i),]
+}
+
+summary(dataother)
+summary(datasingle)
+summary(datamarried)
+
+```
+
+Les individus en situation autre ou marié ont en général un psupport inférieur et particulièrement les personnes dans une situation autre.
+
+
+
+```{r}
+res = glm(livewith ~ emotional+emotionalsat+affect+affectsat+tangible+tangiblesat+psi+psisat+esupport+psupport+BDI+supsources, family = binomial ,data)
+
+summary(res)
+```
+
+
+
+
+
+
+```{r}
+res = glm(enrolment ~ emotional+emotionalsat+affect+affectsat+tangible+tangiblesat+psi+psisat+esupport+psupport+BDI+supsources, family = binomial ,data)
+
+summary(res)
+```
+```{r}
+res = glm(firstyr ~ emotional+emotionalsat+affect+affectsat+tangible+tangiblesat+psi+psisat+esupport+psupport+BDI+supsources, family = binomial ,data)
+
+summary(res)
+```
+```{r}
+res = glm(employment ~ emotional+emotionalsat+affect+affectsat+tangible+tangiblesat+psi+psisat+esupport+psupport+BDI+supsources, family = binomial ,data)
+
+summary(res)
+```
+
+
+Les variables employment, firstyr, enrolment et livewith ne semblent pas être liées avec les variables quantitatives.
+
+
+
+Tout d'abord, il faut bien noter que les influences observées sont très légères (le seuil est dépassé de peu à chaque fois). Malgré cela, on peut se dire que les femmes, australiennes entre 18 et 20 ans ou à plus de 40 ans ont plus tendance à être victime de dépression.
+
+
+
+Cependant, le jeu n'est pas équilibré pour plusieurs variables et l'on sait que les méthodes de classifications supervisées sont particulièrement sensibles à cela. Nous aurions pu équilibrer le jeu de données à l'aide de la fonction SMOTE mais l'équilibrage étant différent à chaque compilation, il aurait été compliqué de commenter les observations (qui seront forcément différentes pour un lecteur qui recompile le code). Il faut donc garder cela en tête à la vue de nos conclusions. 
+
+

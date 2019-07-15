@@ -1,0 +1,85 @@
+---
+title: "Analyse Descriptive"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data=read.csv("../Data/socsupport.csv",header=TRUE,sep=";")
+attach(data)
+str(data)
+```
+On trouve 8 variables qualitatives et 13 variables quantitatives. Les données sont chargées correctement aux vues des descriptions du jeu de données (la 13ième variable quantitative correspond à un indice lié à chaque individu et n'est pas utile à notre étude). On remarque cependant que certaines données au niveau des variables quantitatives sont incomplètes. On supprime donc les individus correspondant pour ne pas avoir de problèmes plus tard (nous les supprimerons pour toutes les études des variables quantitatives).
+
+```{r}
+n=nrow(data)
+p=ncol(data)
+
+delete = vector("numeric",n)
+
+for(i in 1:n){
+  for(j in 1:p){
+    if(is.na(data[i,j]))
+      delete[i]=1
+  }
+}
+
+for(i in n:1){
+  if (delete[i]==1)
+    data=data[-c(i),]
+}
+
+data = data[,-c(1)]
+
+summary(data)
+```
+
+
+
+
+La table summary nous donne un grand nombre d'informations que ce soit sur les variables quantitatives ou sur les variables qualitatives. On peut observer la répartition des individus selon les variables qualitatives et des données statistiques concernant les variables quantitatives. Ces informations sont cependant difficile à lire à travers cette table. Pour faciliter la représentation, nous allons utiliser d'une part des boxplot pour les variables quantitatives et des diagrammes en "camembert" pour les variables qualitatives.
+
+
+
+```{r}
+boxplot(data[,-c(1,2,3,4,5,6,7,8,9)])
+```
+
+
+
+La plupart des variables quantitatives ont un écart-type situé entre 10 et 15 excepté le score au BDI qui est plus de l'ordre de 20. Nous allons voir si les grandes variations des résultats au test BDI (et donc d'un état détecté de déppression) ont un effet sur les autres variables.
+
+
+
+
+```{r}
+pie(table(gender))
+pie(table(age))
+pie(table(country))
+pie(table(marital))
+pie(table(livewith))
+pie(table(employment))
+pie(table(firstyr))
+pie(table(enrolment))
+```
+
+
+
+On remarque que certaines variables sont assez mal réparties, comme par exemple le nombre d'australiens qui est très supérieur aux autres au niveau de country. Nous verrons plus tard si ces variables ont vraiment un impact sur les autres éléments du jeu de données et si elles nous permettent tout de même d'extraire des informations.
+
+
+
+
+```{r}
+pairs(data)
+```
+
+
+
+Le tableau des corrélations 2 à 2 obtenus par pairs n'est pas sufffisamment lisible pour obtenir des informations sur le jeu de données. Nous allons donc poursuivre notre extraction d'information à l'aide de différentes méthodes plus appropriées.  
+
+
+

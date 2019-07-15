@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<link rel=stylesheet href="style.css"  />
+		<title>Rapport de projet analyse de données </title>
+	</head>
+
+	<body>
+		<header>
+			<div id="tete">
+				<div id="titre">
+					<h1 class="phrase"> Rapport de projet d'analyse de données</h1>
+				</div>
+				
+			</div>
+			
+		</header>
+		
+		<nav>
+				
+				
+		</nav>
+
+		
+
+		<div id="introduction">
+			<div class="subtitle">
+				<h2 id="sous-titre"> Sommaire </h2>
+				<span><a href="#Intro"><h4> Introduction	</h4></a>
+				<span><a href="#AD"><h4> Analyse descriptive	</h4></a>
+				<span><a href="#ACP"><h4> Analyse en composantes principales	</h4></a>
+				<span><a href="#ACM"><h4> Analyse des correspondances multiples	</h4></a>
+				<span><a href="#Nsuper"><h4> Classification non supervisée	</h4></a>
+				<span><a href="#Super"><h4> Classification supervisée	</h4></a>
+				<span><a href="#Conclu"><h4> Conclusion	</h4></a>
+
+			</div>
+			<p>
+			</p>
+
+			
+
+			<div class="subtitle">
+				<h2 id="Intro">Introduction </h2>
+				<article>
+
+					<p>
+						Pour ce projet d'analyse de données, nous avons choisi le jeu de données <span><a href="./Data/socsupport.csv">Social Support Data</a></span> créé par Melissa Manning, étudiante en psychologie de l'université national australienne. Ce jeu de données a été construit à la suite d'un sondage et est constitué de 8 variables quanlitatives et de 12 variables quantitatives.
+					</p>
+					<p>
+						 
+
+						 Les variables qualitatives sont les suivantes :
+						 <ul>
+						  <li>gender (genre) : homme, femme</li>
+						  <li>age : 18-20, 21-24, 25-30, 31-40, 40+</li>
+						  <li>country (pays) : australien, autres</li>
+						  <li>marital (situation "amoureuse") : marrié, célibataire, autres</li>
+						  <li>livewith (personnes avec lesquels l'individu vit) : seul, avec des amis, avec ses parents, avec un partenaire, en résidence, autres</li>
+						  <li>employment (emploi) : employé à temps partiel, employé à temps plein, assistance du gouvernement, assitance des parents, autres</li>
+						  <li>firstyr : première année, autres</li>
+						  <li>enrolment (type de contrat) : temps partiel, temps plein, NA</li>
+						</ul>
+
+						Les variables quantitatives sont les suivantes : 
+						 <ul>
+						  <li>emotional : disponibilité d'un support émotionnel</li>
+						  <li>emotionalsat : satisfaction au regard du support émotionnel</li>
+						  <li>tangible : disponibilité d'un support tangible</li>
+						  <li>tangiblesat : satisfaction au regard du support tangible </li>
+						  <li>affect : disponibilité de sources affectueuses</li>
+						  <li>affectsat : satisfaction au regard des sources affectueuses</li>
+						  <li>psi : disponibilité d'interactions sociales positives</li>
+						  <li>psisat : satisfaction au regard des interactions sociales positives</li>
+						  <li>esupport : sources de support émotionnels</li>
+						  <li>psupport : sources de support pratique (matériel/) </li>
+						  <li>supsources</li>
+						  <li>BDI : score au Beck Depression Index</li>
+						</ul>
+
+						Les variables quantitatives ont été déterminées à l'aide de questions sur les différents facteurs étudiés. 
+
+					</p>
+
+					<p>
+						Ce jeu contient donc d'une part des informations sur la situation de l'individu que ce soit familialle ou professionnelle à travers les variables qualitatives et d'autre part sur l'état psychologique de l'individu à travers les variables quantitatives. Nous allons à l'aide des différentes méthodes vues en cours pouvoir étudier les relations entre ces variables et répondre à de nombreuses questions comme par exemple :
+						 <ul>
+						  <li>Est-ce que la situation professionnelle affecte l'état psychologique d'un individu ?</li>
+						  <li>Est-ce qu'il y a un rapport entre l'âge d'un individu et sa situation professionnelle ? </li>
+						  <li>Comment l'état psychologique général d'un individu varie en fonction de l'état des différents facteurs émotionnels ?</li>
+						</ul>
+ 
+					</p>
+
+				</article>
+			</div>	
+
+			
+
+			
+
+			<p>
+			</p>
+
+			<div class="subtitle">
+				<h2 id="AD"> Analyse descriptive  </h2>
+				<p>
+					Comme toute bonne analyse de données, nous commençons par une analyse descriptive des données. L'analyse descriptive nous permet d'extraire les premières informations. Cette analyse n'est pas très poussée et est difficile à étudier notamment pour des jeux de données assez vaste comme le nôtre mais elle permet déjà de donner des premières pistes de corrélation entre les variables et surtout d'éventuelles sources de problèmes au sein des données.  
+				</p>
+
+				<p>
+				</p>
+
+				<p id ="link">
+				<span ><a   href="./Codes/Analyse_descriptive.html">Analyse descriptive sur Social Support Data</a>
+
+				</p>
+
+				<p>
+					L'analyse descriptive ne permet pas de déterminer d'éventuelles relations entre les variables. On voit, cependant, que certaines variables sont représentées de manière inégale (càd qu'un facteur est largement plus représenté que les autres) ce qui pourrait remettre en doute la validité de certaines conclusions. Par exemple, si l'on observe une satisfaction émotionnelle supérieure chez les australiens est-ce réellement parce que les australiens sont plus satisfait émotionnellement que les autres populations ou est-ce parce que nous avons plus de chances de trouver un australien satisfait émotionnellement leur nombre étant supérieur aux autres.
+				</p>
+
+				<p >
+					 On peut également remarquer un lien entre notamment les données qualitatives et madame Manning qui a effectuée le sondage. Madame Manning est un femme, étudiante et australienne et l'on remarque dans les données que la majorité des personnes sondés sont des femmes, jeunes et australiennes. On peut éventuellement penser que madame Manning a réalisé son sondage principalement auprès d'un entourage qui lui est proche et donc que l'analyse de ce jeu de données sera représentatif sur cette même population. 
+				</p>
+
+			</div>
+			<p>
+			</p>
+
+			<div class="subtitle">
+				<h2 id="ACP"> Analyse en composantes principales </h2>
+
+				<p>
+					L'Analyse en Composantes Principales ou ACP est une méthode d'analyse permettant d'extraire la majeure partie des informations des variables quantitatives d'un jeu de données pour fournir une représentation plus explicite de ces données. En ACP, les données sont représentées sous forme d'un nuage de point. Dans notre cas, il y a 12 variables quantitatives. Il faudrait donc un plan de dimension 12 pour pouvoir construire ce nuage. L'idée est de se ramener à un espace de dimension plus petit à l'aide de projections pour avoir une représentation plus claire (l'idéal étant de trouver un sous espace de dimension 2). Nous avons donc mis en place cette méthode pour étudier les informations portées par nos variables quantitatives. 
+				</p>
+
+				<p>
+				</p>
+
+				<p id="link">
+					<span ><a   href="./Codes/ACP.html">Analyse des composantes principales sur Social Support Data</a>
+				</p>
+				
+
+				<p>
+					L'ACP nous a permis de mettre en avant la relation très forte entre le score au BDI de l'individu sondé et les autres facteurs psychologiques. On constate chez les personnes dépressives (score au BDI élevé) que tous les autres facteurs psychologiques sont faibles. On en déduit que les sources et les degrés de satisfaction émotionnels, affectueux et tangibles ont une influence importante sur l'état de dépression d'un individu. 
+				</p>
+
+				<p>
+					De plus, on remarque que de manière général, qu'un individu ayant des sources d'affection, d'émotion ou tangible disponibles en sont satisfait. On en déduit que le seul fait d'apporter de l'attention ou de l'aide à un individu aide à lutter contre ou éviter un état dépressif.
+				</p>
+			</div>
+
+			<p>
+			</p>
+
+			<div class="subtitle">
+				<h2 id="ACM"> Analyse des correspondances multiples </h2>
+
+				<p>
+					L'analyse des correspondances multiples ou ACM s'apparente beaucoup à l'ACP mais pour des variables qualitatives (plus de 2). Les différences avec cette dernière se trouvent dans la manière dont sont centrées les données (le centre de gravité est défini selon le poids des lignes et non plus le poids des individus), la distance entre les profils n'est pas calculé selon la distance euclidienne (distance du chi-deux pour posséder la propriété d'équivalence distributionnelle et ne pas donner trop de poids aux gros candidats) et le calcul de l'inertie (calculée à l'aide de la statistique du test de chi-deux). C'est donc cette méthode que nous avons utilisée pour étudier les variables qualitatives de notre jeu de données.
+				</p>
+				
+				<p>
+				</p>
+
+				<p id="link">
+					<span id ="link" ><a  href="./Codes/ACM.html">Analyse des correspondances multiples sur Social Support Data</a>
+				</p>
+				
+
+				<p>
+					Cette deuxième analyse montre la relation entre l'age de la personne, sa situation amoureuse et les personnes avec qui l'individu vit.
+					 Les personnes de plus de 31 ans vivent en général seuls ou avec un(e) partenaire, et sont mariées ou dans une situation autre. Les personnes de moins de 31 ans sont en général célibataires et vivent avec leur famille, leur parent, en résidence ou des amis.
+				</p>
+
+				<p>
+				</p>
+
+			</div>
+			<p>
+
+			</p>
+
+			<div class="subtitle">
+				<h2 id="Nsuper"> Classification non supervisée </h2>
+				 <p>
+				 	La classification non supervisée est un ensemble de méthodes cherchant à partitionner les individus en un certain nombre de classes. Le but est, à partir d'une partition réalisable, de trouver une nouvelle partition meilleure que la précédente. Le but est de trouver un nombre de partitions permettant d'avoir un maximum d'informations sur le jeu tout en améliorant la lisibilité lors de la représentation des données. La classification non supervisée peut s'appliquer sur les variables quantitatives, les variables qualitatives et sur les deux en même temps. Nous allons donc utiliser ces méthodes pour vérifier et éventuellement apporter des précisions sur les conclusions des études précédentes, et pour étudier les liens entre variables quantitatives et qualitatives. 
+				 </p>
+
+				 <p>
+				</p>
+
+				<p id="link">
+					<span id ="link"  ><a href="./Codes/Non_supervise.html"> Classification non supervisée sur Social Support Data</a>
+				</p>
+				
+
+				<p>
+					L'utilisation de la classification non supervisée a été prolifique. Elle a dans un premier temps permis de confirmer nos observations précédentes mais également d'apporter des informations suplémentaires sur le jeu de données. 
+				</p>
+
+				<p>
+					Au niveau des variables quantitatives, nous avons une nouvelle fois observé l'influence négative d'une dépression sur l'état psychologique des individus. On sait également que, dans la population sondées, environ la moitié des individus ont un bon équilibre psychologique. Environ 40 % de la population sont soit légèrement en dessous soit légérement au dessus de ce bon équilibre. Finalement, moins de 10% de la population est atteinte de dépression.
+				</p>
+
+				<p>
+					Au niveau des variables qualitatives, on observe une nouvelle fois que l'age de la personne, sa situation amoureuse et les personnes avec qui l'individu vit sont liées.
+				</p>
+
+				<p>
+					Toutefois, nous ne sommes pas parvenus à établir un lien entre les variables quantitatives et qualitatives.
+				</p>
+			</div>
+
+			<p>
+			</p>
+
+			<div class="subtitle">
+				<h2 id="Super"> Classification supervisée </h2>
+
+				<p>
+					Contrairement à la classification non supervisée où l'on cherche à partitionner les individus, ici, on considère que l'on a déjà un regroupement en classes. L'objectif est de décider si un nouvel individu se présente dans le jeu de données dans quel groupe l'affecter. Les analyses précédentes nous ont essentiellement permises de montrer les corrélations respectives entre les variables quantitatives et entre les variables qualitatives. Lors de l'utilisation de la classification non supervisée, il ne selblait pas y avoir de relations entre les variables qualitatives et quantitatives. Nous allons donc nous servir de la classification supervisée pour étudier individuellement l'influence de chacune des variables qualitatives sur les variables quantitatives. Nous choisissons la régression logistique pour cette étude. 
+				</p>
+				
+				<p>
+				</p>
+
+				<p id="link">
+					<span id ="link"  ><a href="./Codes/Supervise.html">  Classification supervisée (Régression logistique) sur Social Support Data</a>
+				</p>
+				
+
+				<p>
+					L'étude des relations entre les variables qualitatives et quantitatives nous a permis de voir que les femmes australiennes de plus de 40 ans ou entre 18 et 20 ans ont plus tendance à subir des états de dépression. Cependant, comme nous l'avons précisé au cours de l'étude, le jeu n'est pas équilibré, l'affirmation est donc vraie seulement sur la population étudiée et ne peut être généralisée.
+				</p>
+
+				<p>
+				</p>
+			</div>
+
+			<p>
+			</p>
+
+			<div class="subtitle">
+				<h2 id="Conclu"> Conclusion </h2>
+				<p>
+					En conclusion, on semble remarquer de possibles relations entre état psychologique et situation de l'individu. Indépendamment, la dépression influe fortement l'état psychologique général de l'individu et les individus en fonction de leur age auront une situation amoureuse et vivront avec des personnes différentes. 
+				</p>
+
+				<p>
+					Comme nous avions pu le dire dans l'analyse descriptive, le mauvais équilibre des "populations" au sein de certaines variables qualitatives nous permet pas de tirer autant d'informations que l'on pourrait si les données étaient plus équilibrés. Les graphiques nous ont montré que les variables telles que genre ou pays ont peu d'influence sur les autres variables ce qui est logique. Il est normal de trouver plus de femmes employées à temps partiel étant donné qu'elles sont 3 fois plus présentes dans le jeu de données par exemple. 
+				</p>
+
+				<p>
+					Pour pousser plus loin notre analyse et obtenir plus d'informations sur la population, il serait possible soit de poursuivre le sondage au sein la même population en essayant d'équilibrer les données, soit en choisissant une nouvelle population plus équilibrée ou soit en supprimant ces données du jeu de données ce qui donnerait des représentations plus claires et plus précises.
+				</p>
+				
+			</div>
+			
+		</div>
+		
+		
+	</body>
+</html>
